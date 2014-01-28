@@ -54,8 +54,13 @@ GPIO.setup(SPICS, GPIO.OUT)
 # 10k trim pot connected to adc #0
 potentiometer_adc = 0
 
-while True:
-    # read the analog pin
-    trim_pot = readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
-    print "trim_pot:", trim_pot
-    time.sleep(0.5)
+try:
+    while True:
+	# read the analog pin
+	trim_pot = readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
+	print "trim_pot:%d (%.2f volts)" % (trim_pot, trim_pot * 3.3/1023.0)
+	time.sleep(0.5)
+except KeyboardInterrupt:
+    GPIO.cleanup()
+
+
