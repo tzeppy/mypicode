@@ -3,9 +3,6 @@ import time
 import os
 import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
-DEBUG = 1
-
 # read SPI data from MCP3008 chip, 8 possible adc's (0 thru 7)
 def readadc(adcnum, clockpin, mosipin, misopin, cspin):
     if ((adcnum > 7) or (adcnum < 0)):
@@ -47,6 +44,7 @@ SPIMISO = 23
 SPIMOSI = 24
 SPICS = 25
 
+GPIO.setmode(GPIO.BCM)
 # set up the SPI interface pins
 GPIO.setup(SPIMOSI, GPIO.OUT)
 GPIO.setup(SPIMISO, GPIO.IN)
@@ -54,16 +52,9 @@ GPIO.setup(SPICLK, GPIO.OUT)
 GPIO.setup(SPICS, GPIO.OUT)
 
 # 10k trim pot connected to adc #0
-potentiometer_adc = 3;
-
-last_read = 0       # this keeps track of the last potentiometer value
-tolerance = 5       # to keep from being jittery we'll only change
-                    # volume when the pot has moved more than 5 'counts'
+potentiometer_adc = 0
 
 while True:
-    # we'll assume that the pot didn't move
-    trim_pot_changed = False
-
     # read the analog pin
     trim_pot = readadc(potentiometer_adc, SPICLK, SPIMOSI, SPIMISO, SPICS)
     print "trim_pot:", trim_pot
